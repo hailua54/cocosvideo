@@ -163,7 +163,7 @@ namespace experimental{
              */
             virtual void addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback);
 						virtual void getVideoSize(const std::function<void(Ref*,int,int)>& callback);
-			
+
 						virtual void onNotifyVideoSize(int w, int h);
             /**
              * @brief A function which will be called when video is playing.

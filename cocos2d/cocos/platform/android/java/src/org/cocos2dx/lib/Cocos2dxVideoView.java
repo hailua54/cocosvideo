@@ -189,8 +189,8 @@ public class Cocos2dxVideoView extends SurfaceView implements MediaPlayerControl
         getHolder().addCallback(mSHCallback);
         //Fix issue#11516:Can't play video on Android 2.3.x
         getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        setFocusable(true);
-        setFocusableInTouchMode(true);
+        //setFocusable(true);
+        //setFocusableInTouchMode(true);
         mCurrentState = STATE_IDLE;
         mTargetState  = STATE_IDLE;
     }

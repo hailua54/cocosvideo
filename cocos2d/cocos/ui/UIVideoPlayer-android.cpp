@@ -70,19 +70,6 @@ using namespace cocos2d::experimental::ui;
 
 static std::unordered_map<int, VideoPlayer*> s_allVideoPlayers;
 
-extern "C" {
-    void Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeNotifyVideoSizeCallback(JNIEnv * env, jobject obj, jint index, jint w, jint h) {
-			CCLOG("Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeNotifyVideoSizeCallback");
-
-	    auto it = s_allVideoPlayers.find(index);
-	    if (it != s_allVideoPlayers.end())
-	    {
-	        s_allVideoPlayers[index]->onNotifyVideoSize(w, h);
-	    }
-
-    }
-}
-
 VideoPlayer::VideoPlayer()
 : _videoPlayerIndex(-1)
 , _eventCallback(nullptr)
@@ -279,12 +266,6 @@ void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& cal
     _eventCallback = callback;
 }
 
-void VideoPlayer::getVideoSize(const std::function<void(Ref*,int,int)>& callback)
-{
-	_notifyVideoSizeCallback = callback;
-	JniHelper::callStaticVoidMethod(videoHelperClassName, "getVideoSize", _videoPlayerIndex);
-}
-
 void VideoPlayer::onPlayEvent(int event)
 {
     if (event == QUIT_FULLSCREEN)
@@ -336,6 +317,25 @@ void executeVideoCallback(int index,int event)
     {
         s_allVideoPlayers[index]->onPlayEvent(event);
     }
+}
+
+extern "C" {
+    void Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeNotifyVideoSizeCallback(JNIEnv * env, jobject obj, jint index, jint w, jint h) {
+			CCLOG("Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeNotifyVideoSizeCallback");
+
+	    auto it = s_allVideoPlayers.find(index);
+	    if (it != s_allVideoPlayers.end())
+	    {
+	        s_allVideoPlayers[index]->onNotifyVideoSize(w, h);
+	    }
+
+    }
+}
+
+void VideoPlayer::getVideoSize(const std::function<void(Ref*,int,int)>& callback)
+{
+	_notifyVideoSizeCallback = callback;
+	JniHelper::callStaticVoidMethod(videoHelperClassName, "getVideoSize", _videoPlayerIndex);
 }
 
 #endif

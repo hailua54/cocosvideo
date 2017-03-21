@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "ui/UIVideoPlayer.h"
+#include "ui/UILayout.h"
 #include<functional>
 
 USING_NS_CC;
@@ -10,6 +11,13 @@ Scene* HelloWorld::createScene()
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
+	cocos2d::LayerColor* cl = cocos2d::LayerColor::create();
+	scene->addChild(cl);
+	cl->setBlendFunc(BlendFunc::DISABLE);
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	cl->setContentSize(visibleSize);
+
+	cl->setBlendFunc(BlendFunc::DISABLE);
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
 	layer->setName("game");
@@ -26,11 +34,11 @@ bool HelloWorld::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !LayerColor::init() )
+    if ( !Layer::init() )
     {
         return false;
     }
-	this->setBlendFunc(BlendFunc::DISABLE);
+	
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -86,6 +94,12 @@ bool HelloWorld::init()
 	videoPlayer->setFileName("res/cocosvideo.mp4");
 	//videoPlayer->setURL("rtsp://cdn01-mstream.w88livestream.com/etable4m/live_1");
 	this->addChild(videoPlayer);
+
+	cocos2d::ui::Layout* layout = cocos2d::ui::Layout::create();
+	layout->setContentSize(Size(240.0f, 432.0f));
+	videoPlayer->setAnchorPoint(Vec2(0, 0));
+	videoPlayer->setPosition(cocos2d::Vec2(0, visibleSize.height - vh));
+	this->addChild(layout);
 	/*
 	enum class EventType
             {
@@ -95,7 +109,7 @@ bool HelloWorld::init()
                 COMPLETED
             };
 	*/
-	this->vod = videoPlayer;
+	
 	videoPlayer->addEventListener([this, videoPlayer](cocos2d::Ref* target, cocos2d::experimental::ui::VideoPlayer::EventType type) {
 		CCLOG("video event %ld ", type);
 		if (type == cocos2d::experimental::ui::VideoPlayer::EventType::PLAYING)
