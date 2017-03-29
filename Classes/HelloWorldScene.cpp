@@ -92,7 +92,6 @@ bool HelloWorld::init()
 	videoPlayer->setAnchorPoint(Vec2(0,0));
 	videoPlayer->setPosition(cocos2d::Vec2(0, visibleSize.height - vh));
 	videoPlayer->setFileName("res/cocosvideo.mp4");
-	//videoPlayer->setURL("rtsp://cdn01-mstream.w88livestream.com/etable4m/live_1");
 	this->addChild(videoPlayer);
 
 	cocos2d::ui::Layout* layout = cocos2d::ui::Layout::create();
